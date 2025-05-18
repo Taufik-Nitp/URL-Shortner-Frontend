@@ -6,10 +6,17 @@ const SlugPage = () => {
   const { slug } = useParams();
   const [longURL, setLongURL] = useState("");
 
+
   useEffect(() => {
     try {
+      var token= localStorage.getItem("jwttoken");
       axios
-        .get("http://localhost:8080/" + slug)
+        .get("http://localhost:8080/" + slug,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
         .then((data) => {
           setLongURL(data.data);
           console.log(data.status);
@@ -18,7 +25,6 @@ const SlugPage = () => {
             setLongURL("EXPIRED");
           } else if (data.data["status"] === "ACTIVE") {
             setLongURL(data.data["longUrl"]);
-            // console.log(data.data["longUrl"])
             window.location.href = data.data["longUrl"];
           }
         })
@@ -31,7 +37,9 @@ const SlugPage = () => {
             console.log("Unexpected  server error");
           }
         });
-    } catch (err) {}
+    } catch (err) {
+      
+    }
   }, [longURL]);
 
   return (

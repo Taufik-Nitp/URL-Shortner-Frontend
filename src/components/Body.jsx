@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
+import { useNavigate} from "react-router-dom";
 
 export default function BasicFormControl() {
   const [LongURL, setLongURL] = useState("");
   const [shortURL, setShortURL] = useState("");
+  const navigate= useNavigate();
+  var token;
   const handleLongURL = function (e) {
     setLongURL(e.target.value);
     console.log(e.target.value);
@@ -12,12 +15,17 @@ export default function BasicFormControl() {
 
   const handleSubmit = async function (event) {
     event.preventDefault();
-
+      token= localStorage.getItem("jwttoken")
     setShortURL("");
 
     await axios
       .post("http://localhost:8080/longtoshorturl", {
         url: LongURL,
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
       .then((res) => {
         //  console.log(res.data)
@@ -33,6 +41,16 @@ export default function BasicFormControl() {
     console.log(shortURL);
     console.log("hellllllloooooooooo");
   };
+
+
+  useEffect(() => {
+      token = localStorage.getItem("jwttoken");
+
+    if(!token || token===""){
+        navigate("/login")
+    }
+  }, [token]);
+
 
   return (
     <>
