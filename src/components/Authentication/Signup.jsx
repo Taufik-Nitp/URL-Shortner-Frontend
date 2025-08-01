@@ -13,21 +13,46 @@ const Signup = () =>
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Handle login logic here (e.g., API call)
         console.log('Signup with:', username, password);
-        const signupBody= {
-              "username": username,
-              "password": password
-        }
-        console.log(signupBody);
-        axios.post("http://localhost:8080/api/auth/signup", signupBody).then((res)=>{
-             console.log("Signup successfull: ",res.data);
-             navigate("/login");
-        }).catch((err)=>{
-              console.log("Error unsuccesfull: ", err)
-        })
-
+    
+        const signupBody = {
+            username: username,
+            password: password
+        };
+    
+        axios.post("http://localhost:8080/api/auth/signup", signupBody)
+            .then((res) => {
+                console.log("Signup successful: ", res.data);
+                navigate("/login");
+            })
+            .catch((err) => {
+                if (err.response) {
+                    const status = err.response.status;
+                    const message = err.response.data;
+    
+                    if (status === 409) {
+                        alert("Username already exists. Please choose another.");
+                    } else if (status === 503) {
+                        alert("Server is currently unavailable. Please try again later.");
+                    } else if (status === 500) {
+                        alert("An unexpected error occurred. Please try again.");
+                    } else {
+                        alert("Signup failed: " + message);
+                    }
+    
+                    console.error("Signup error:", status, message);
+                } else if (err.request) {
+                    // Request was made but no response (e.g., server is down)
+                    alert("Unable to connect to the server. Please check your network.");
+                    console.error("No response from server:", err.request);
+                } else {
+                    // Something else happened setting up the request
+                    alert("Signup error: " + err.message);
+                    console.error("Error:", err.message);
+                }
+            });
     };
+    
 
   return (
     <div>

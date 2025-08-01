@@ -29,7 +29,7 @@ const SlugPage = () => {
           }
         })
         .catch((err) => {
-          console.log("404  hai bahi ========+>>>>>>>");
+          console.log("404  hai bhai ========+>>>>>>>");
           if (err.response && err.response.status === 404) {
             console.log("Not found============>>>>>");
             setLongURL("Not Found");

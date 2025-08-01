@@ -19,12 +19,12 @@ const Login = () => {
         }
         console.log(signupBody);
         axios.post("http://localhost:8080/api/auth/signin", signupBody).then((res)=>{
-             console.log("Login successfull: ",res.data);
-             localStorage.setItem("jwttoken",res.data);
+             console.log("Login successfull, token:  ",res.data.token);
+             localStorage.setItem("jwttoken",res.data.token);
              navigate("/");
-             
         }).catch((err)=>{
               console.log("Error unsuccesfull: ", err)
+              alert("Wrong Credentials... Try again")
         })
 
     };

@@ -17,7 +17,7 @@ export default function Navbar() {
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <a href="/">URL Shortner</a>
-          </Typography>
+          </Typography>c
           <Button color="inherit" onClick={()=>navigate("/login")}>Login</Button>
           <Button color="inherit" onClick={()=>{
             localStorage.removeItem("jwttoken")
