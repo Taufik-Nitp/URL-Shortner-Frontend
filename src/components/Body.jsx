@@ -7,7 +7,7 @@ export default function BasicFormControl() {
   const [LongURL, setLongURL] = useState("");
   const [shortURL, setShortURL] = useState("");
   const navigate= useNavigate();
-  var token;
+
   const handleLongURL = function (e) {
     setLongURL(e.target.value);
     console.log(e.target.value);
@@ -15,20 +15,22 @@ export default function BasicFormControl() {
 
   const handleSubmit = async function (event) {
     event.preventDefault();
-      token= localStorage.getItem("jwttoken")
     setShortURL("");
 
     await axios
       .post("http://localhost:8080/longtoshorturl", {
         url: LongURL,
       },{
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   "Content-Type": "application/json",
+        // },
+        // required when storing  jwt in localStorage. Now it is stored in cookie.
+
+        withCredentials: true
+
       })
       .then((res) => {
-        //  console.log(res.data)
         setShortURL(res.data);
       })
       .catch((err) => {
@@ -38,18 +40,7 @@ export default function BasicFormControl() {
         setShortURL("");
         alert("Enter a valid URL !!!");
       });
-    console.log(shortURL);
-    console.log("hellllllloooooooooo");
   };
-
-
-  useEffect(() => {
-      token = localStorage.getItem("jwttoken");
-
-    if(!token || token===""){
-        navigate("/login")
-    }
-  }, [token]);
 
 
   return (

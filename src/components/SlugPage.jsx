@@ -12,15 +12,15 @@ const SlugPage = () => {
       var token= localStorage.getItem("jwttoken");
       axios
         .get("http://localhost:8080/" + slug,{
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          //   "Content-Type": "application/json",
+          // },
+          // required when storing jwt in localStorage. Now it is in Cookie with HttpOnly as true
+          withCredentials: true
         })
         .then((data) => {
           setLongURL(data.data);
-          console.log(data.status);
-          console.log(data.data);
           if (data.data["status"] === "EXPIRED") {
             setLongURL("EXPIRED");
           } else if (data.data["status"] === "ACTIVE") {
@@ -29,9 +29,7 @@ const SlugPage = () => {
           }
         })
         .catch((err) => {
-          console.log("404  hai bhai ========+>>>>>>>");
           if (err.response && err.response.status === 404) {
-            console.log("Not found============>>>>>");
             setLongURL("Not Found");
           } else {
             console.log("Unexpected  server error");
