@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { colors } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Navbar() {
   const navigate= useNavigate();
@@ -20,8 +21,13 @@ export default function Navbar() {
           </Typography>c
           <Button color="inherit" onClick={()=>navigate("/login")}>Login</Button>
           <Button color="inherit" onClick={()=>{
-            localStorage.removeItem("jwttoken")
-            navigate("/login")
+            // localStorage.removeItem("jwttoken")
+            axios.post("http://localhost:8080/api/auth/logout",{},{withCredentials: true}).then((res)=>{
+                console.log(res);
+                navigate("/login")
+            }).catch((err)=>{
+                console.log(err);
+            })
           }}>Logout</Button>
         </Toolbar>
       </AppBar>
